@@ -197,8 +197,8 @@
   </div>
   <div class="main-card hidden" id="contactPage">
     <h2>CONTACT US</h2>
-    <form id="contactForm" method="POST" action="ContactServlet">
-      <textarea name="message" placeholder="Share your thoughts, reviews, or suggestions..." rows="6" style="resize: vertical;"></textarea><br />
+    <form id="contactForm" onsubmit="return sendEmail(event)">
+      <textarea id="contactMessage" placeholder="Share your thoughts, reviews, or suggestions..." rows="6" style="resize: vertical;" required></textarea><br />
       <button class="primary" type="submit">Send</button>
     </form>
   </div>
@@ -315,6 +315,20 @@ And while others copy, we change the game 🔥<br /> Join us — pick smart, p
       document.getElementById('addProductForm').reset();
     } else {
       alert('Please fill all fields correctly');
+    }
+    return false;
+  }
+  function sendEmail(event) {
+    event.preventDefault();
+    const message = document.getElementById('contactMessage').value.trim();
+    if (message) {
+      const subject = 'Feedback from Smart Pick User';
+      const body = encodeURIComponent(message);
+      window.location.href = `mailto:dhruvray3@gmail.com?subject=${encodeURIComponent(subject)}&body=${body}`;
+      alert('Opening your email client to send the message!');
+      document.getElementById('contactForm').reset();
+    } else {
+      alert('Please enter a message before sending.');
     }
     return false;
   }
