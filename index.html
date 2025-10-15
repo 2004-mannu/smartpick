@@ -271,168 +271,161 @@
         <div class="main-card hidden" id="whyPage">
             <h2>Why We Exist ?</h2>
             <div class="mini-note">It is not just a marketplace, it's a revolution, we are here to make Indian creators louder, bolder, and unapologetically original 💙 <br>Every product here is not just a "thing" — it's a living story of passion, culture, and fearless innovation ⛓<br>The idea behind this movement is simple yet powerful — to prove that Made in India is more than just a label.<br>It's a stamp of creativity, quality, and pride 🇮🇳<br></div>
-            <img src="https://github.com/2004-mannu/smartpick/blob/main/action%20plan.jpg" class="action-plan-image">
+            <img src="C:\Users\choud\OneDrive\Desktop\SML\action plan.jpg" class="action-plan-image">
             <p> At <strong>SMART PICK</strong>, we ignite the spark that grows into a flame — a flame of innovation, pride, and progress. And while others copy, we change the game 🔥<br /> Join us — pick smart, pick proudly, pick <STRONG>INDIAN</STRONG> </p>
         </div>
     </div>
-    <script>
-        // Load products from localStorage when the page loads
-        document.addEventListener('DOMContentLoaded', () => {
-            loadProducts();
+   <script>
+    // Load products from localStorage when the page loads
+    document.addEventListener('DOMContentLoaded', () => {
+        loadProducts();
+    });
+
+    function showPage(pageId) {
+        const pages = ['loginPage', 'homePage', 'contactPage', 'addProductPage', 'cartPage', 'whyPage'];
+        pages.forEach(id => {
+            document.getElementById(id).classList.add('hidden');
         });
+        document.getElementById(pageId).classList.remove('hidden');
+    }
 
-        function showPage(pageId) {
-            const pages = ['loginPage', 'homePage', 'contactPage', 'addProductPage', 'cartPage', 'whyPage'];
-            pages.forEach(id => {
-                document.getElementById(id).classList.add('hidden');
-            });
-            document.getElementById(pageId).classList.remove('hidden');
+    function login() {
+        const phone = document.getElementById('phoneInput').value.trim();
+        const password = document.getElementById('passwordInput').value.trim();
+        if (phone.length === 10 && password.length > 0) {
+            alert('Login successful!');
+            showPage('homePage');
+            document.querySelector('nav').classList.remove('hidden');
+            document.getElementById('loginPage').style.display = 'none';
+        } else {
+            alert('Please enter a valid 10-digit phone number and password');
         }
+    }
 
-        function login() {
-            const phone = document.getElementById('phoneInput').value.trim();
-            const password = document.getElementById('passwordInput').value.trim();
-            if (phone.length === 10 && password.length > 0) {
-                alert('Login successful!');
-                showPage('homePage');
-                document.querySelector('nav').classList.remove('hidden');
-                document.getElementById('loginPage').style.display = 'none';
+    function searchProducts() {
+        const searchValue = document.getElementById('searchInput').value.toLowerCase();
+        const products = document.querySelectorAll('#productList .product');
+        products.forEach(prod => {
+            const name = prod.dataset.name.toLowerCase();
+            if (name.indexOf(searchValue) > -1) {
+                prod.style.display = "block";
             } else {
-                alert('Please enter a valid 10-digit phone number and password');
+                prod.style.display = "none";
             }
+        });
+    }
+
+    const cart = [];
+
+    function addToCart(name, price) {
+        const item = { name, price, quantity: 1 };
+        const found = cart.find(p => p.name === name);
+        if (found) {
+            found.quantity += 1;
+        } else {
+            cart.push(item);
         }
+        alert(`${name} added to cart`);
+    }
 
-        function searchProducts() {
-            const searchValue = document.getElementById('searchInput').value.toLowerCase();
-            const products = document.querySelectorAll('#productList .product');
-            products.forEach(prod => {
-                const name = prod.dataset.name.toLowerCase();
-                if (name.indexOf(searchValue) > -1) {
-                    prod.style.display = "block";
-                } else {
-                    prod.style.display = "none";
-                }
-            });
+    function showCart() {
+        const cartDiv = document.getElementById('cartItems');
+        cartDiv.innerHTML = '';
+        let total = 0;
+        cart.forEach(item => {
+            const itemTotal = item.price * item.quantity;
+            total += itemTotal;
+            const div = document.createElement('div');
+            div.textContent = `${item.name} x${item.quantity} - ₹${itemTotal}`;
+            cartDiv.appendChild(div);
+        });
+        document.getElementById('totalPrice').textContent = total;
+    }
+
+    const oldShowPage = showPage;
+    showPage = function (pageId) {
+        oldShowPage(pageId);
+        if (pageId === 'cartPage') {
+            showCart();
         }
+    }
 
-        const cart = [];
+    function addProduct(event) {
+        event.preventDefault();
+        const name = document.getElementById('vendorProductName').value.trim();
+        const price = parseFloat(document.getElementById('vendorProductPrice').value);
+        const imageInput = document.getElementById('vendorProductImage');
+        const imageFile = imageInput.files[0];
 
-        function addToCart(name, price) {
-            const item = { name, price, quantity: 1 };
-            const found = cart.find(p => p.name === name);
-            if (found) {
-                found.quantity += 1;
-            } else {
-                cart.push(item);
-            }
-            alert(`${name} added to cart`);
-        }
-
-        function showCart() {
-            const cartDiv = document.getElementById('cartItems');
-            cartDiv.innerHTML = '';
-            let total = 0;
-            cart.forEach(item => {
-                const itemTotal = item.price * item.quantity;
-                total += itemTotal;
-                const div = document.createElement('div');
-                div.textContent = `${item.name} x${item.quantity} - ₹${itemTotal}`;
-                cartDiv.appendChild(div);
-            });
-            document.getElementById('totalPrice').textContent = total;
-        }
-
-        const oldShowPage = showPage;
-        showPage = function (pageId) {
-            oldShowPage(pageId);
-            if (pageId === 'cartPage') {
-                showCart();
-            }
-        }
-
-        function addProduct(event) {
-            event.preventDefault();
-            const name = document.getElementById('vendorProductName').value.trim();
-            const price = parseFloat(document.getElementById('vendorProductPrice').value);
-            const imageInput = document.getElementById('vendorProductImage');
-            const imageFile = imageInput.files[0];
-
-            if (name && !isNaN(price) && imageFile) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    // Get existing products from localStorage, or initialize a new array
-                    const products = JSON.parse(localStorage.getItem('products')) || [];
-
-                    // Create a new product object and add it to the array
-                    const newProduct = {
-                        name: name,
-                        price: price,
-                        image: e.target.result
-                    };
-                    products.push(newProduct);
-
-                    // Save the updated products array back to localStorage
-                    localStorage.setItem('products', JSON.stringify(products));
-
-                    // Display the new product on the page
-                    renderProduct(newProduct);
-
-                    alert('Product added successfully!');
-                    document.getElementById('addProductForm').reset();
-                    updateFileName(imageInput); // Reset the file name display
+        if (name && !isNaN(price) && imageFile) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const products = JSON.parse(localStorage.getItem('products')) || [];
+                const newProduct = {
+                    name: name,
+                    price: price,
+                    image: e.target.result
                 };
-                reader.readAsDataURL(imageFile);
-            } else {
-                alert('Please fill all fields correctly');
-            }
-            return false;
+                products.push(newProduct);
+                localStorage.setItem('products', JSON.stringify(products));
+                renderProduct(newProduct);
+                alert('Product added successfully!');
+                document.getElementById('addProductForm').reset();
+                updateFileName(imageInput);
+            };
+            reader.readAsDataURL(imageFile);
+        } else {
+            alert('Please fill all fields correctly');
         }
+        return false;
+    }
 
-        function renderProduct(product) {
-            const productList = document.getElementById('productList');
-            const newProduct = document.createElement('div');
-            newProduct.className = 'product';
-            newProduct.dataset.name = product.name;
-            newProduct.dataset.price = product.price;
-            newProduct.innerHTML = `
-                <img src="${product.image}" alt="${product.name}" />
-                <div>${product.name}</div>
-                <div>₹${product.price.toFixed(2)}</div>
-                <button onclick="addToCart('${product.name}', ${product.price})">Add to Cart</button>
-            `;
-            productList.appendChild(newProduct);
-        }
+    function renderProduct(product) {
+        const productList = document.getElementById('productList');
+        const newProduct = document.createElement('div');
+        newProduct.className = 'product';
+        newProduct.dataset.name = product.name;
+        newProduct.dataset.price = product.price;
+        newProduct.innerHTML = `
+            <img src="${product.image}" alt="${product.name}" />
+            <div>${product.name}</div>
+            <div>₹${product.price.toFixed(2)}</div>
+            <button onclick="addToCart('${product.name}', ${product.price})">Add to Cart</button>
+        `;
+        productList.appendChild(newProduct);
+    }
 
-        function loadProducts() {
-            const products = JSON.parse(localStorage.getItem('products')) || [];
-            products.forEach(product => {
-                renderProduct(product);
-            });
-        }
+    function loadProducts() {
+        const products = JSON.parse(localStorage.getItem('products')) || [];
+        products.forEach(product => {
+            renderProduct(product);
+        });
+    }
 
-        function sendEmail(event) {
-            event.preventDefault();
-            const message = document.getElementById('contactMessage').value.trim();
-            if (message) {
-                const subject = 'Feedback from Smart Pick User';
-                const body = encodeURIComponent(message);
-                window.location.href = `mailto:dhruvray3@gmail.com?subject=${encodeURIComponent(subject)}&body=${body}`;
-                alert('Opening your email client to send the message!');
-                document.getElementById('contactForm').reset();
-            } else {
-                alert('Please enter a message before sending.');
-            }
-            return false;
+    function sendEmail(event) {
+        event.preventDefault();
+        const message = document.getElementById('contactMessage').value.trim();
+        if (message) {
+            const subject = 'Feedback from Smart Pick User';
+            const body = encodeURIComponent(message);
+            window.location.href = `mailto:dhruvray3@gmail.com?subject=${encodeURIComponent(subject)}&body=${body}`;
+            alert('Opening your email client to send the message!');
+            document.getElementById('contactForm').reset();
+        } else {
+            alert('Please enter a message before sending.');
         }
+        return false;
+    }
 
-        function updateFileName(input) {
-            const button = input.nextElementSibling;
-            if (input.files && input.files[0]) {
-                button.setAttribute('data-file-name', input.files[0].name);
-            } else {
-                button.removeAttribute('data-file-name');
-            }
+    function updateFileName(input) {
+        const button = input.nextElementSibling;
+        if (input.files && input.files[0]) {
+            button.setAttribute('data-file-name', input.files[0].name);
+        } else {
+            button.removeAttribute('data-file-name');
         }
-    </script>
+    }
+</script>
+
 </body>
 </html>
