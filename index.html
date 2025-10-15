@@ -1,337 +1,438 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>SMART PICK</title>
-<style>
-  body {
-    background: linear-gradient(135deg, #7fabe1 0%, #c8d6fa 100%);
-    margin: 0;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    min-height: 100vh;
-  }
-  header {
-    background: rgba(23,44,77,0.93);
-    color: #fff;
-    padding: 25px 40px;
-    border-radius: 0 0 38px 38px/0 0 40px 40px;
-    box-shadow: 0 6px 18px 0 #5580b1;
-    display: flex; justify-content: space-between; align-items: center;
-    position: relative; z-index: 2;
-    font-weight: bold;
-    font-size: 1.2em;
-  }
-  .brand {
-    font-family: 'Comic Sans MS', cursive, sans-serif;
-    font-size: 2.6em;
-    letter-spacing: 2px;
-    color: #a2ecf5;
-    text-shadow: 3px 6px 14px #393ec5a2;
-    user-select: none;
-  }
-  nav {
-    display: flex;
-    gap: 30px;
-  }
-  nav.hidden {
-    display: none;
-  }
-  nav button {
-    background: none;
-    border: none;
-    color: white;
-    font-weight: 700;
-    font-size: 1em;
-    text-transform: uppercase;
-    cursor: pointer;
-    outline: none;
-    padding: 13px 10px;
-  }
-  nav button:hover {
-    color: #ffab00;
-  }
-  #content {
-    padding: 44px 24px 40px 24px;
-    max-width: 1100px;
-    margin: auto;
-  }
-  .main-card {
-    max-width: 700px;
-    margin: 40px auto 20px auto;
-    background: rgba(255, 255, 255, 0.92);
-    border-radius: 30px;
-    box-shadow: 0 8px 34px #469fc36b;
-    padding: 40px 54px 42px 54px;
-    border: 3px dashed #a3c1fa6c;
-    position: relative;
-  }
-  .hidden { display:none; }
-  h2 {
-    font-family: 'Comic Sans MS', cursive, sans-serif;
-    color: #2f44aa;
-    font-size: 2.1em;
-    margin-bottom: 28px;
-    letter-spacing: 1.1px;
-  }
-  .mini-note {
-    font-family: 'Comic Sans MS', cursive, sans-serif;
-    font-size: 1.14em;
-    color: #6578c2;
-    margin-bottom: 30px;
-    margin-top: -20px;
-  }
-  input[type=text], input[type=password], input[type=tel], input[type=number], textarea {
-    width: 100%;
-    padding: 14px 18px;
-    margin: 9px 0 26px 0;
-    box-sizing: border-box;
-    border: 2px solid #aec6ff;
-    border-radius: 14px;
-    font-size: 1.1em;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  }
-  button.primary {
-    background: linear-gradient(95deg, #3ae3fb 30%, #3653c2 100%);
-    border: none;
-    color: #fff;
-    border-radius: 16px;
-    font-weight: bold;
-    font-size: 1.12em;
-    padding: 14px 38px;
-    margin-top: 10px;
-    cursor: pointer;
-    transition: background .2s, box-shadow .2s;
-    box-shadow: 0 3px 15px #648eeef2;
-  }
-  button.primary:hover {
-    background: #1e5ccc;
-    box-shadow: 0 2px 9px #2166b0c1;
-  }
-  #searchBar input {
-    width: 85%;
-    padding: 14px 16px;
-    border-radius: 16px;
-    border: 2.2px solid #a3bcf5;
-    font-size: 1.1em;
-    background: #e3effd;
-    margin-bottom: 23px;
-    outline: none;
-  }
-  #productList {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 24px;
-    margin-top: 14px;
-  }
-  .product {
-    background: linear-gradient(132deg, #b7e3ff 10%, #def9ff 100%);
-    border: 2.5px dashed #6ab8ec67;
-    border-radius: 22px;
-    box-shadow: 0 5px 13px #97bfff53;
-    padding: 18px 10px;
-    text-align: center;
-    transition: transform .12s ease-in-out;
-    position: relative;
-  }
-  .product:hover {
-    transform: scale(1.05) rotate(-2deg);
-    box-shadow: 0 12px 28px #465fbc5c;
-  }
-  .product img {
-    width: 80px;
-    height: 80px;
-    object-fit: contain;
-    margin-bottom: 10px;
-    border-radius: 18px;
-    background: #eaf4fb;
-    border: 1.2px solid #95cdf1;
-  }
-  .product button {
-    background: linear-gradient(91deg, #55cbfd 20%, #5c83f5 100%);
-    color: #fff;
-    border-radius: 9px;
-    border: none;
-    font-weight: bold;
-    font-size: 1em;
-    padding: 8px 20px;
-    margin-top: 10px;
-    box-shadow: 0 2.5px 6px #78a9ec36;
-    cursor: pointer;
-  }
-  .product button:hover {
-    background: #3456e8;
-  }
-  #cartItems {
-    margin-top: 20px;
-    color: #4846c0;
-    font-size: 1.15em;
-  }
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>SMART PICK</title>
+    <style>
+        body {
+            background: linear-gradient(135deg, #7fabe1 0%, #c8d6fa 100%);
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+        }
+        header {
+            background: rgba(23,44,77,0.93);
+            color: #fff;
+            padding: 25px 40px;
+            border-radius: 0 0 38px 38px/0 0 40px 40px;
+            box-shadow: 0 6px 18px 0 #5580b1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+        .brand {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 2.6em;
+            letter-spacing: 2px;
+            color: #000;
+            text-shadow: none;
+            user-select: none;
+        }
+        nav {
+            display: flex;
+            gap: 30px;
+        }
+        nav.hidden {
+            display: none;
+        }
+        nav button {
+            background: none;
+            border: none;
+            color: white;
+            font-weight: 700;
+            font-size: 1em;
+            text-transform: uppercase;
+            cursor: pointer;
+            outline: none;
+            padding: 13px 10px;
+        }
+        nav button:hover {
+            color: #ffab00;
+        }
+        #content {
+            padding: 44px 24px 40px 24px;
+            max-width: 1100px;
+            margin: auto;
+        }
+        .main-card {
+            max-width: 700px;
+            margin: 40px auto 20px auto;
+            background: rgba(255, 255, 255, 0.92);
+            border-radius: 30px;
+            box-shadow: 0 8px 34px #469fc36b;
+            padding: 40px 54px 42px 54px;
+            border: 3px dashed #a3c1fa6c;
+            position: relative;
+        }
+        .hidden {
+            display:none;
+        }
+        h2 {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #000;
+            font-size: 2.1em;
+            margin-bottom: 28px;
+            letter-spacing: 1.1px;
+        }
+        .mini-note {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 1.14em;
+            color: #000;
+            margin-bottom: 30px;
+            margin-top: -20px;
+        }
+        input[type=text], input[type=password], input[type=tel], input[type=number], textarea {
+            width: 100%;
+            padding: 14px 18px;
+            margin: 9px 0 26px 0;
+            box-sizing: border-box;
+            border: 2px solid #aec6ff;
+            border-radius: 14px;
+            font-size: 1.1em;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        button.primary {
+            background: linear-gradient(95deg, #3ae3fb 30%, #3653c2 100%);
+            border: none;
+            color: #fff;
+            border-radius: 16px;
+            font-weight: bold;
+            font-size: 1.12em;
+            padding: 14px 38px;
+            margin-top: 10px;
+            cursor: pointer;
+            transition: background .2s, box-shadow .2s;
+            box-shadow: 0 3px 15px #648eeef2;
+        }
+        button.primary:hover {
+            background: #1e5ccc;
+            box-shadow: 0 2px 9px #2166b0c1;
+        }
+        #searchBar input {
+            width: 85%;
+            padding: 14px 16px;
+            border-radius: 16px;
+            border: 2.2px solid #a3bcf5;
+            font-size: 1.1em;
+            background: #e3effd;
+            margin-bottom: 23px;
+            outline: none;
+        }
+        #productList {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 24px;
+            margin-top: 14px;
+        }
+        .product {
+            background: linear-gradient(132deg, #b7e3ff 10%, #def9ff 100%);
+            border: 2.5px dashed #6ab8ec67;
+            border-radius: 22px;
+            box-shadow: 0 5px 13px #97bfff53;
+            padding: 18px 10px;
+            text-align: center;
+            transition: transform .12s ease-in-out;
+            position: relative;
+        }
+        .product:hover {
+            transform: scale(1.05) rotate(-2deg);
+            box-shadow: 0 12px 28px #465fbc5c;
+        }
+        .product img {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+            margin-bottom: 10px;
+            border-radius: 18px;
+            background: #eaf4fb;
+            border: 1.2px solid #95cdf1;
+        }
+        .product button {
+            background: linear-gradient(91deg, #55cbfd 20%, #5c83f5 100%);
+            color: #fff;
+            border-radius: 9px;
+            border: none;
+            font-weight: bold;
+            font-size: 1em;
+            padding: 8px 20px;
+            margin-top: 10px;
+            box-shadow: 0 2.5px 6px #78a9ec36;
+            cursor: pointer;
+        }
+        .product button:hover {
+            background: #3456e8;
+        }
+        #cartItems {
+            margin-top: 20px;
+            color: #4846c0;
+            font-size: 1.15em;
+        }
 
-</style>
+        /* Style for the file input button */
+        .file-upload-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+            width: 100%;
+            margin: 9px 0 26px 0;
+        }
+        .file-upload-wrapper input[type="file"] {
+            font-size: 100px;
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            cursor: pointer;
+        }
+        .file-upload-wrapper .file-upload-button {
+            display: block;
+            width: 100%;
+            padding: 14px 18px;
+            box-sizing: border-box;
+            border: 2px solid #aec6ff;
+            border-radius: 14px;
+            font-size: 1.1em;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f0f4ff;
+            text-align: left;
+            color: #555;
+            cursor: pointer;
+        }
+        .file-upload-wrapper .file-upload-button:after {
+            content: 'Choose an image...';
+        }
+        .file-upload-wrapper input[type="file"]:valid + .file-upload-button:after {
+            content: attr(data-file-name);
+        }
+        .action-plan-image {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 30px; /* Adjust as needed for spacing */
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+    </style>
 </head>
 <body>
-<header>
-  <div class="brand">SMART PICK</div>
-  <nav class="hidden">
-    <button onclick="showPage('homePage')">HOME</button>
-    <button onclick="showPage('contactPage')">CONTACT US</button>
-    <button onclick="showPage('addProductPage')">ADD PRODUCT</button>
-    <button onclick="showPage('cartPage')">MY CART</button>
-    <button onclick="showPage('whyPage')">WHY WE EXIST</button>
-  </nav>
-</header>
-<div id="content">
-  <div class="main-card" id="loginPage">
-    <h2>LOGIN</h2>
-    <div class="mini-note">Login to you account</div>
-    <input type="tel" id="phoneInput" placeholder="Phone Number" maxlength="10" />
-    <input type="password" id="passwordInput" placeholder="Password" />
-    <button class="primary" onclick="login()">Login</button>
-  </div>
-  <div class="main-card hidden" id="homePage">
-    <div id="searchBar">
-      <input type="text" id="searchInput" placeholder="" onkeyup="searchProducts()" />
+    <header>
+        <div class="brand">SMART PICK</div>
+        <nav class="hidden">
+            <button onclick="showPage('homePage')">HOME</button>
+            <button onclick="showPage('contactPage')">CONTACT US</button>
+            <button onclick="showPage('addProductPage')">ADD PRODUCT</button>
+            <button onclick="showPage('cartPage')">MY CART</button>
+            <button onclick="showPage('whyPage')">WHY WE EXIST</button>
+        </nav>
+    </header>
+    <div id="content">
+        <div class="main-card" id="loginPage">
+            <h2>LOGIN</h2>
+            <div class="mini-note">Login to you account</div>
+            <input type="tel" id="phoneInput" placeholder="Phone Number" maxlength="10" />
+            <input type="password" id="passwordInput" placeholder="Password" />
+            <button class="primary" onclick="login()">Login</button>
+        </div>
+        <div class="main-card hidden" id="homePage">
+            <div id="searchBar">
+                <input type="text" id="searchInput" placeholder="" onkeyup="searchProducts()" />
+            </div>
+            <div id="productList"></div>
+        </div>
+        <div class="main-card hidden" id="contactPage">
+            <h2>CONTACT US</h2>
+            <form id="contactForm" onsubmit="return sendEmail(event)">
+                <textarea id="contactMessage" placeholder="Share your thoughts, reviews, or suggestions..." rows="6" style="resize: vertical;" required></textarea><br />
+                <button class="primary" type="submit">Send</button>
+            </form>
+        </div>
+        <div class="main-card hidden" id="addProductPage">
+            <h2>ADD PRODUCT</h2>
+            <form id="addProductForm" onsubmit="return addProduct(event)">
+                <input type="text" id="vendorProductName" placeholder="Product Name" required />
+                <input type="number" id="vendorProductPrice" placeholder="Price in ₹" required />
+                <div class="file-upload-wrapper">
+                    <input type="file" id="vendorProductImage" accept="image/*" required onchange="updateFileName(this)" />
+                    <button type="button" class="file-upload-button"></button>
+                </div>
+                <button class="primary" type="submit">Add Product</button>
+            </form>
+        </div>
+        <div class="main-card hidden" id="cartPage">
+            <h2>MY CART</h2>
+            <div id="cartItems"></div>
+            <div><strong>Total Price: ₹<span id="totalPrice">0</span></strong></div>
+        </div>
+        <div class="main-card hidden" id="whyPage">
+            <h2>Why We Exist ?</h2>
+            <div class="mini-note">It is not just a marketplace, it's a revolution, we are here to make Indian creators louder, bolder, and unapologetically original 💙 <br>Every product here is not just a "thing" — it's a living story of passion, culture, and fearless innovation ⛓<br>The idea behind this movement is simple yet powerful — to prove that Made in India is more than just a label.<br>It's a stamp of creativity, quality, and pride 🇮🇳<br></div>
+            <img src="C:\Users\computer1\Desktop\action plan.jpg" class="action-plan-image">
+            <p> At <strong>SMART PICK</strong>, we ignite the spark that grows into a flame — a flame of innovation, pride, and progress. And while others copy, we change the game 🔥<br /> Join us — pick smart, pick proudly, pick <STRONG>INDIAN</STRONG> </p>
+        </div>
     </div>
-    <div id="productList"></div>
-  </div>
-  <div class="main-card hidden" id="contactPage">
-    <h2>CONTACT US</h2>
-    <form id="contactForm" onsubmit="return sendEmail(event)">
-      <textarea id="contactMessage" placeholder="Share your thoughts, reviews, or suggestions..." rows="6" style="resize: vertical;" required></textarea><br />
-      <button class="primary" type="submit">Send</button>
-    </form>
-  </div>
-  <div class="main-card hidden" id="addProductPage">
-    <h2>ADD PRODUCT</h2>
-    <form id="addProductForm" onsubmit="return addProduct(event)">
-      <input type="text" id="vendorProductName" placeholder="Product Name" required />
-      <input type="number" id="vendorProductPrice" placeholder="Price in ₹" required />
-      <input type="text" id="vendorProductImage" placeholder="Image filename (e.g., img10.jpg)" required />
-      <button class="primary" type="submit">Add Product</button>
-    </form>
-  </div>
-  <div class="main-card hidden" id="cartPage">
-    <h2>MY CART</h2>
-    <div id="cartItems"></div>
-    <div><strong>Total Price: ₹<span id="totalPrice">0</span></strong></div>
-  </div>
-  <div class="main-card hidden" id="whyPage">
-    <h2>Why We Exist ?</h2>
-    <div class="mini-note">It is not just a marketplace, it's a revolution, we are here to make Indian creators louder, bolder, and unapologetically original 💙 <br>Every product here is not just a "thing" — it's a living story of passion, culture, and fearless innovation ⛓<br>The idea behind this movement is simple yet powerful — to prove that Made in India is more than just a label.<br>It's a stamp of creativity, quality, and pride 🇮🇳<br><br>
-      Action plan<br><br>
-To empower local creators and give them a global stage.<br>
-To inspire buyers to choose originality over copies.<br>
-To redefine shopping as a cultural movement, not just a transaction.
-</div>
-    <p>
-      At <strong>SMART PICK</strong>, we ignite the spark that grows into a flame — a flame of innovation, pride, and progress.
-And while others copy, we change the game 🔥<br /> Join us — pick smart, pick proudly, pick <STRONG>INDIAN</STRONG>
-    </p>
-  </div>
-</div>
-<script>
-  function showPage(pageId) {
-    const pages = ['loginPage', 'homePage', 'contactPage', 'addProductPage', 'cartPage', 'whyPage'];
-    pages.forEach(id => {
-      document.getElementById(id).classList.add('hidden');
-    });
-    document.getElementById(pageId).classList.remove('hidden');
-  }
-  function login() {
-    const phone = document.getElementById('phoneInput').value.trim();
-    const password = document.getElementById('passwordInput').value.trim();
-    if (phone.length === 10 && password.length > 0) {
-      alert('Login successful!');
-      showPage('homePage');
-      document.querySelector('nav').classList.remove('hidden');
-      document.getElementById('loginPage').style.display = 'none';
-    } else {
-      alert('Please enter a valid 10-digit phone number and password');
-    }
-  }
-  function searchProducts() {
-    const searchValue = document.getElementById('searchInput').value.toLowerCase();
-    const products = document.querySelectorAll('#productList .product');
-    products.forEach(prod => {
-      const name = prod.dataset.name.toLowerCase();
-      if (name.indexOf(searchValue) > -1) {
-        prod.style.display = "block";
-      } else {
-        prod.style.display = "none";
-      }
-    });
-  }
-  const cart = [];
-  function addToCart(name, price) {
-    const item = { name, price, quantity: 1 };
-    const found = cart.find(p => p.name === name);
-    if (found) {
-      found.quantity += 1;
-    } else {
-      cart.push(item);
-    }
-    alert(`${name} added to cart`);
-  }
-  function showCart() {
-    const cartDiv = document.getElementById('cartItems');
-    cartDiv.innerHTML = '';
-    let total = 0;
-    cart.forEach(item => {
-      const itemTotal = item.price * item.quantity;
-      total += itemTotal;
-      const div = document.createElement('div');
-      div.textContent = `${item.name} x${item.quantity} - ₹${itemTotal}`;
-      cartDiv.appendChild(div);
-    });
-    document.getElementById('totalPrice').textContent = total;
-  }
-  const oldShowPage = showPage;
-  showPage = function (pageId) {
-    oldShowPage(pageId);
-    if (pageId === 'cartPage') {
-      showCart();
-    }
-  }
-  function addProduct(event) {
-    event.preventDefault();
-    const name = document.getElementById('vendorProductName').value.trim();
-    const price = parseFloat(document.getElementById('vendorProductPrice').value);
-    const image = document.getElementById('vendorProductImage').value.trim();
-    if (name && !isNaN(price) && image) {
-      const productList = document.getElementById('productList');
-      const newProduct = document.createElement('div');
-      newProduct.className = 'product';
-      newProduct.dataset.name = name;
-      newProduct.dataset.price = price;
-      newProduct.innerHTML = `
-        <img src="${image}" alt="${name}" />
-        <div>${name}</div>
-        <div>₹${price.toFixed(2)}</div>
-        <button onclick="addToCart('${name}', ${price})">Add to Cart</button>
-      `;
-      productList.appendChild(newProduct);
-      alert('Product added successfully!');
-      document.getElementById('addProductForm').reset();
-    } else {
-      alert('Please fill all fields correctly');
-    }
-    return false;
-  }
-  function sendEmail(event) {
-    event.preventDefault();
-    const message = document.getElementById('contactMessage').value.trim();
-    if (message) {
-      const subject = 'Feedback from Smart Pick User';
-      const body = encodeURIComponent(message);
-      window.location.href = `mailto:dhruvray3@gmail.com?subject=${encodeURIComponent(subject)}&body=${body}`;
-      alert('Opening your email client to send the message!');
-      document.getElementById('contactForm').reset();
-    } else {
-      alert('Please enter a message before sending.');
-    }
-    return false;
-  }
-</script>
+    <script>
+        // Load products from localStorage when the page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            loadProducts();
+        });
+
+        function showPage(pageId) {
+            const pages = ['loginPage', 'homePage', 'contactPage', 'addProductPage', 'cartPage', 'whyPage'];
+            pages.forEach(id => {
+                document.getElementById(id).classList.add('hidden');
+            });
+            document.getElementById(pageId).classList.remove('hidden');
+        }
+
+        function login() {
+            const phone = document.getElementById('phoneInput').value.trim();
+            const password = document.getElementById('passwordInput').value.trim();
+            if (phone.length === 10 && password.length > 0) {
+                alert('Login successful!');
+                showPage('homePage');
+                document.querySelector('nav').classList.remove('hidden');
+                document.getElementById('loginPage').style.display = 'none';
+            } else {
+                alert('Please enter a valid 10-digit phone number and password');
+            }
+        }
+
+        function searchProducts() {
+            const searchValue = document.getElementById('searchInput').value.toLowerCase();
+            const products = document.querySelectorAll('#productList .product');
+            products.forEach(prod => {
+                const name = prod.dataset.name.toLowerCase();
+                if (name.indexOf(searchValue) > -1) {
+                    prod.style.display = "block";
+                } else {
+                    prod.style.display = "none";
+                }
+            });
+        }
+
+        const cart = [];
+
+        function addToCart(name, price) {
+            const item = { name, price, quantity: 1 };
+            const found = cart.find(p => p.name === name);
+            if (found) {
+                found.quantity += 1;
+            } else {
+                cart.push(item);
+            }
+            alert(`${name} added to cart`);
+        }
+
+        function showCart() {
+            const cartDiv = document.getElementById('cartItems');
+            cartDiv.innerHTML = '';
+            let total = 0;
+            cart.forEach(item => {
+                const itemTotal = item.price * item.quantity;
+                total += itemTotal;
+                const div = document.createElement('div');
+                div.textContent = `${item.name} x${item.quantity} - ₹${itemTotal}`;
+                cartDiv.appendChild(div);
+            });
+            document.getElementById('totalPrice').textContent = total;
+        }
+
+        const oldShowPage = showPage;
+        showPage = function (pageId) {
+            oldShowPage(pageId);
+            if (pageId === 'cartPage') {
+                showCart();
+            }
+        }
+
+        function addProduct(event) {
+            event.preventDefault();
+            const name = document.getElementById('vendorProductName').value.trim();
+            const price = parseFloat(document.getElementById('vendorProductPrice').value);
+            const imageInput = document.getElementById('vendorProductImage');
+            const imageFile = imageInput.files[0];
+
+            if (name && !isNaN(price) && imageFile) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    // Get existing products from localStorage, or initialize a new array
+                    const products = JSON.parse(localStorage.getItem('products')) || [];
+
+                    // Create a new product object and add it to the array
+                    const newProduct = {
+                        name: name,
+                        price: price,
+                        image: e.target.result
+                    };
+                    products.push(newProduct);
+
+                    // Save the updated products array back to localStorage
+                    localStorage.setItem('products', JSON.stringify(products));
+
+                    // Display the new product on the page
+                    renderProduct(newProduct);
+
+                    alert('Product added successfully!');
+                    document.getElementById('addProductForm').reset();
+                    updateFileName(imageInput); // Reset the file name display
+                };
+                reader.readAsDataURL(imageFile);
+            } else {
+                alert('Please fill all fields correctly');
+            }
+            return false;
+        }
+
+        function renderProduct(product) {
+            const productList = document.getElementById('productList');
+            const newProduct = document.createElement('div');
+            newProduct.className = 'product';
+            newProduct.dataset.name = product.name;
+            newProduct.dataset.price = product.price;
+            newProduct.innerHTML = `
+                <img src="${product.image}" alt="${product.name}" />
+                <div>${product.name}</div>
+                <div>₹${product.price.toFixed(2)}</div>
+                <button onclick="addToCart('${product.name}', ${product.price})">Add to Cart</button>
+            `;
+            productList.appendChild(newProduct);
+        }
+
+        function loadProducts() {
+            const products = JSON.parse(localStorage.getItem('products')) || [];
+            products.forEach(product => {
+                renderProduct(product);
+            });
+        }
+
+        function sendEmail(event) {
+            event.preventDefault();
+            const message = document.getElementById('contactMessage').value.trim();
+            if (message) {
+                const subject = 'Feedback from Smart Pick User';
+                const body = encodeURIComponent(message);
+                window.location.href = `mailto:dhruvray3@gmail.com?subject=${encodeURIComponent(subject)}&body=${body}`;
+                alert('Opening your email client to send the message!');
+                document.getElementById('contactForm').reset();
+            } else {
+                alert('Please enter a message before sending.');
+            }
+            return false;
+        }
+
+        function updateFileName(input) {
+            const button = input.nextElementSibling;
+            if (input.files && input.files[0]) {
+                button.setAttribute('data-file-name', input.files[0].name);
+            } else {
+                button.removeAttribute('data-file-name');
+            }
+        }
+    </script>
 </body>
 </html>
